@@ -12,7 +12,7 @@ function HomePage() {
       {dreams && dreams.length > 0 ? (
         dreams.map((dream) => <DreamItem key={dream.id} dream={dream} />)
       ) : (
-        <p>まだ夢は記録されていません。 <Link to="/new">最初の夢を記録しましょう！</Link></p>
+        <p className="no-items-message">まだ夢は記録されていません。 <Link to="/new">最初の夢を記録しましょう！</Link></p>
       )}
     </div>
   );

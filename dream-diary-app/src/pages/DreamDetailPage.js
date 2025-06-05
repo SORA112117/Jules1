@@ -4,10 +4,18 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 
 function DreamDetailPage() {
   const { id } = useParams();
-  const [dreams, setDreams] = useLocalStorage("dreams", []); // Also get setDreams for potential delete later
+  const [dreams, setDreams] = useLocalStorage("dreams", []);
   const navigate = useNavigate();
 
   const dream = dreams.find((d) => d.id === id);
+
+  const handleDelete = () => {
+    if (window.confirm(`「${dream.title}」を本当に削除しますか？`)) {
+      const updatedDreams = dreams.filter(d => d.id !== id);
+      setDreams(updatedDreams);
+      navigate("/");
+    }
+  };
 
   if (!dream) {
     return (
@@ -18,17 +26,6 @@ function DreamDetailPage() {
     );
   }
 
-  // Placeholder for delete function
-  const handleDelete = () => {
-    // Delete logic will be added in a later step
-    // For now, just log or navigate
-    console.log("Delete dream:", id);
-    // const updatedDreams = dreams.filter(d => d.id !== id);
-    // setDreams(updatedDreams);
-    // navigate("/");
-    alert("削除機能は後ほど実装されます。");
-  };
-
   return (
     <div>
       <h1>{dream.title}</h1>
@@ -36,17 +33,16 @@ function DreamDetailPage() {
       <p><strong>タイプ:</strong> {dream.dreamType}</p>
       <div>
         <strong>内容:</strong>
-        <div style={{ whiteSpace: "pre-wrap", border: "1px solid #ccc", padding: "10px", marginTop: "5px" }}>
+        <div className="dream-content-box">
           {dream.content}
         </div>
       </div>
       {dream.tags && dream.tags.length > 0 && (
         <p><strong>タグ:</strong> {dream.tags.join(", ")}</p>
       )}
-      <div style={{ marginTop: "20px" }}>
+      <div className="dream-actions">
         <Link to={`/dreams/${id}/edit`} style={{ marginRight: "10px" }}>編集</Link>
-        {/* Delete button will call handleDelete */}
-        <button onClick={handleDelete}>削除</button>
+        <button onClick={handleDelete} type="button">削除</button>
         <br />
         <br />
         <Link to="/">一覧へ戻る</Link>
